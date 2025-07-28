@@ -1,0 +1,127 @@
+# Configuration file for Stock Market Prediction Project
+
+# Data Collection Settings
+data:
+  # Stock symbols to analyze
+  symbols: ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'NVDA', 'META', 'NFLX']
+  
+  # Date range for historical data
+  start_date: '2020-01-01'
+  end_date: null  # null means current date
+  
+  # Data sources
+  stock_data_source: 'yfinance'
+  news_api_key: 'your_newsapi_key_here'  # Get from https://newsapi.org/
+  alpha_vantage_key: 'your_alpha_vantage_key_here'  # Get from https://www.alphavantage.co/
+  
+  # News collection settings
+  news_sources: ['reuters', 'bloomberg', 'cnbc', 'financial-times', 'the-wall-street-journal']
+  max_articles_per_day: 100
+
+# Feature Engineering Settings
+features:
+  # Technical indicators
+  technical_indicators:
+    - 'SMA_5'    # Simple Moving Average
+    - 'SMA_20'
+    - 'SMA_50'
+    - 'EMA_12'   # Exponential Moving Average
+    - 'EMA_26'
+    - 'RSI_14'   # Relative Strength Index
+    - 'MACD'     # MACD
+    - 'BB_upper' # Bollinger Bands
+    - 'BB_lower'
+    - 'ATR_14'   # Average True Range
+    - 'VWAP'     # Volume Weighted Average Price
+  
+  # Sentiment analysis settings
+  sentiment:
+    window_days: 7  # Days to aggregate sentiment
+    methods: ['vader', 'textblob', 'finbert']
+    
+  # Lag features
+  lag_periods: [1, 2, 3, 5, 10]  # Days to look back
+
+# Model Training Settings
+models:
+  # Target variable
+  target_column: 'price_change_next_day'
+  prediction_horizon: 1  # Days ahead to predict
+  
+  # Train/validation/test split
+  train_ratio: 0.7
+  validation_ratio: 0.15
+  test_ratio: 0.15
+  
+  # Cross-validation
+  cv_folds: 5
+  time_series_cv: true
+  
+  # Model hyperparameters
+  random_forest:
+    n_estimators: 200
+    max_depth: 15
+    min_samples_split: 5
+    random_state: 42
+  
+  xgboost:
+    n_estimators: 300
+    max_depth: 8
+    learning_rate: 0.1
+    subsample: 0.8
+    random_state: 42
+  
+  lstm:
+    sequence_length: 60
+    hidden_units: 128
+    dropout_rate: 0.2
+    epochs: 100
+    batch_size: 32
+    
+  ensemble:
+    method: 'weighted_average'  # or 'stacking'
+    weights: [0.3, 0.4, 0.3]  # RF, XGB, LSTM
+
+# Evaluation Settings
+evaluation:
+  metrics: ['mse', 'mae', 'directional_accuracy', 'sharpe_ratio', 'max_drawdown']
+  
+  # Backtesting
+  initial_capital: 10000
+  transaction_cost: 0.001  # 0.1%
+  
+  # Risk management
+  max_position_size: 0.2  # 20% of portfolio
+  stop_loss: 0.05  # 5%
+  take_profit: 0.15  # 15%
+
+# Dashboard Settings
+dashboard:
+  title: "Stock Market Prediction Dashboard"
+  port: 8501
+  
+  # Visualization
+  charts:
+    - 'price_prediction'
+    - 'feature_importance'
+    - 'sentiment_analysis'
+    - 'portfolio_performance'
+    - 'risk_metrics'
+
+# Logging and Monitoring
+logging:
+  level: 'INFO'
+  log_file: 'logs/stock_prediction.log'
+  
+# Database Settings
+database:
+  type: 'sqlite'
+  path: 'data/stock_data.db'
+
+# Paths
+paths:
+  data_raw: 'data/raw/'
+  data_processed: 'data/processed/'
+  models: 'models/'
+  logs: 'logs/'
+  outputs: 'outputs/'
